@@ -1,0 +1,26 @@
+﻿
+@page "/"
+@rendermode InteractiveServer
+
+<PageTitle>Home</PageTitle>
+
+
+<Create  />
+
+<button type="button" class="btn btn-primary mb-3" @onclick="ShowAddBookModal">
+    Add New Book
+</button> 
+
+
+<BookList />
+
+@code {
+    [Inject] IJSRuntime JS { get; set; } = default!;
+
+    private async Task ShowAddBookModal()
+    {
+        await JS.InvokeVoidAsync("modalHelper.showModal", "#addBookModal");
+    }
+
+
+ }

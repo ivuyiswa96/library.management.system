@@ -1,0 +1,87 @@
+﻿
+@using library.management.system.Interfaces
+@using library.management.system.Models
+@inject IBookService BookService
+
+<h3>Search for available books..</h3>
+
+
+
+@if (_isLoading)
+{
+
+    <div class="mb-3">
+        <input type="text" @bind="searchText" placeholder="Search by title..." class="form-control" disabled />
+        <button class="btn btn-primary mt-2" @onclick="RetrieveBooks">
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Searching...
+        </button>      
+    </div>
+}
+else
+{
+    <div class="mb-3">
+        <input type="text" @bind="searchText" placeholder="Search by title..." class="form-control" />
+        <button class="btn btn-primary mt-2" @onclick="RetrieveBooks">
+          Search
+        </button>
+
+    </div>
+
+}
+@if (books == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (!books.Any())
+{
+    <p>No books found.</p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Year</th>
+                <th class="text-end">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var book in books)
+            {
+                <tr>
+                    <td>@book.Title</td>
+                    <td>@book.Author</td> 
+                    <td>@book.PublicationYear</td> 
+                    <td class="text-end">
+                        <button class="btn btn-danger btn-sm" @onclick="@(() => DeleteBook(book))">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Book> books = new();
+    private bool _isLoading=false;
+    private string searchText = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await RetrieveBooks(); 
+    }
+
+    private async Task RetrieveBooks()
+    {
+        books = (await BookService.SearchAsync(searchText)).ToList();
+    }
+
+    private async Task DeleteBook(Book book) 
+    {
+        await BookService.DeleteAsync(book);
+        await RetrieveBooks(); 
+    }
+}
