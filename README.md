@@ -1,4 +1,4 @@
-# **Library Management System**
+ch# **Library Management System**
 
 This is a Library Management System that allows you to **create**, **retrieve**, **search**, and **delete** books.
 
@@ -60,8 +60,7 @@ To run the unit tests:
 The unit tests cover the following core functionalities:
 
 - Creating a book  
-- Retrieving a book by ID  
-- Updating a book  
+- Retrieving a book by ID   
 - Deleting a book  
 
 These tests are implemented using the **xUnit** testing framework.
